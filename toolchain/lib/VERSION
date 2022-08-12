@@ -1,0 +1,2 @@
+libc.a is built using the following command:
+bazel build --config wasm //libc:c -c opt

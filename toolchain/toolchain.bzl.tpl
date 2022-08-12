@@ -194,7 +194,7 @@ def _toolchain_impl(ctx):
         toolchain_identifier = "wasm-toolchain",
         host_system_name = "local",
         target_system_name = "local",
-        target_cpu = "wasm32",
+        target_cpu = "wasm",
         target_libc = "unknown",
         compiler = "clang",
         abi_version = "unknown",

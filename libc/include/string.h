@@ -14,6 +14,38 @@ void* memmove(void*, const void*, size_t);
 void* memset(void*, int, size_t);
 int   memcmp(const void*, const void*, size_t);
 
+#if __has_builtin(__builtin_memcpy)
+#define memcpy __builtin_memcpy
+#endif
+
+#if __has_builtin(__builtin_memmove)
+#define memmove __builtin_memmove
+#endif
+
+#if __has_builtin(__builtin_memset)
+#define memset __builtin_memset
+#endif
+
+#if __has_builtin(__builtin_memcmp)
+#define memcmp __builtin_memcmp
+#endif
+
+int    strcmp(const char* l, const char* r);
+char*  strcpy(char* __restrict d, const char* __restrict s);
+size_t strlen(const char* s);
+
+#if __has_builtin(__builtin_strcmp)
+#define strcmp __builtin_strcmp
+#endif
+
+#if __has_builtin(__builtin_strcpy)
+#define strcpy __builtin_strcpy
+#endif
+
+#if __has_builtin(__builtin_strlen)
+#define strlen __builtin_strlen
+#endif
+
 #ifdef __cplusplus
 }  // extern "C"
 #endif

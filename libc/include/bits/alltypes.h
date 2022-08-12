@@ -1,4 +1,10 @@
-#if defined(__NEED_NULL)
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#if defined(__NEED_NULL) && !defined(__DEFINED_NULL)
+#define __DEFINED_NULL
+
 #if __cplusplus >= 201103L
 #define NULL nullptr
 #elif defined(__cplusplus)
@@ -8,7 +14,9 @@
 #endif
 #endif
 
-#if defined(__NEED_sized_int_t)
+#if defined(__NEED_sized_int_t) && !defined(__DEFINED_sized_int_t)
+#define __DEFINED_sized_int_t
+
 typedef signed char   int8_t;
 typedef unsigned char uint8_t;
 
@@ -27,7 +35,9 @@ typedef unsigned long long uint64_t;
 #endif
 #endif
 
-#if defined(__NEED_ptrdiff_t)
+#if defined(__NEED_ptrdiff_t) && !defined(__DEFINED_ptrdiff_t)
+#define __DEFINED_ptrdiff_t
+
 #if __LP64__
 typedef signed long   intptr_t;
 typedef unsigned long uintptr_t;
@@ -39,7 +49,9 @@ typedef signed long long   ptrdiff_t;
 #endif
 #endif
 
-#if defined(__NEED_size_t)
+#if defined(__NEED_size_t) && !defined(__DEFINED_size_t)
+#define __DEFINED_size_t
+
 #if __LP64__
 typedef signed long   ssize_t;
 typedef unsigned long size_t;
@@ -49,6 +61,13 @@ typedef unsigned long long size_t;
 #endif
 #endif
 
-#if defined(__NEED_wchar_t)
-typedef int wchar_t;
+#if defined(__NEED_wchar_t) && !defined(__DEFINED_wchar_t)
+#define __DEFINED_wchar_t
+
+// The type wchar_t appears to be defined by the compilation unit itself
+// typedef int wchar_t;
+#endif
+
+#ifdef __cplusplus
+}  // extern "C"
 #endif

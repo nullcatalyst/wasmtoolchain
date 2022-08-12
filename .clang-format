@@ -1,0 +1,27 @@
+---
+Language: Cpp
+BasedOnStyle: Google
+
+IndentWidth: 4
+AccessModifierOffset: -2
+AlignConsecutiveAssignments: true
+AlignConsecutiveDeclarations: true
+ColumnLimit: 120
+DerivePointerAlignment: false
+PointerAlignment: Left
+ReflowComments: true
+SortIncludes: true
+
+---
+Language: ObjC
+BasedOnStyle: Google
+
+IndentWidth: 4
+AccessModifierOffset: -2
+AlignConsecutiveAssignments: true
+AlignConsecutiveDeclarations: true
+ColumnLimit: 120
+DerivePointerAlignment: false
+PointerAlignment: Left
+ReflowComments: true
+SortIncludes: true

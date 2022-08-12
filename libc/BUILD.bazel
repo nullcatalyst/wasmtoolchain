@@ -1,7 +1,19 @@
 cc_library(
-    name = "libc",
+    name = "c",
+    srcs = [
+        "src/memcmp.c",
+        "src/memcpy.c",
+        "src/memmove.c",
+        "src/memset.c",
+        "src/strcmp.c",
+        "src/strcpy.c",
+        "src/strlen.c",
+    ],
     visibility = ["//:__subpackages__"],
-    deps = [":hdrs"],
+    deps = [
+        ":hdrs",
+        "//dlmalloc",
+    ],
 )
 
 cc_library(

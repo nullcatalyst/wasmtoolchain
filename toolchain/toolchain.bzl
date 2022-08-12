@@ -10,6 +10,8 @@ def _wasm_toolchain_impl(ctx):
             "clang.exe": "@bazel_wasm_toolchain//toolchain:windows-x86_64/clang.exe",
             "clang++.exe": "@bazel_wasm_toolchain//toolchain:windows-x86_64/clang.exe",
             "llvm-ar.exe": "@bazel_wasm_toolchain//toolchain:windows-x86_64/llvm-ar.exe",
+            "wasm-ld.exe": "@bazel_wasm_toolchain//toolchain:windows-x86_64/lld.exe",
+            "libc.a": "@bazel_wasm_toolchain//toolchain:lib/libc.a",
         }
     else:
         base_path = ctx.execute(["pwd"]).stdout
