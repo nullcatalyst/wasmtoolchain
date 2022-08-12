@@ -1,0 +1,15 @@
+cc_library(
+    name = "cxx",
+    visibility = ["//:__subpackages__"],
+    deps = [
+        ":hdrs",
+        "//lib/c",
+    ],
+)
+
+cc_library(
+    name = "hdrs",
+    hdrs = glob(["include/**/*"]),
+    includes = ["include"],
+    visibility = ["//:__subpackages__"],
+)
