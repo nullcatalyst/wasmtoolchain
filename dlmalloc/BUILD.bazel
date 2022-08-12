@@ -1,0 +1,11 @@
+cc_library(
+    name = "dlmalloc",
+    srcs = [
+        "dlmalloc.c",
+        "unistd.h",
+    ],
+    defines = ["PAGESIZE=65535"],
+    textual_hdrs = ["malloc.c"],
+    visibility = ["//:__subpackages__"],
+    deps = ["//libc:hdrs"],
+)

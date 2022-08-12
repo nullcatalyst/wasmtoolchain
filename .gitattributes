@@ -1,0 +1,6 @@
+toolchain/macos-x86_64/clang-14 filter=lfs diff=lfs merge=lfs -text
+toolchain/macos-x86_64/lld filter=lfs diff=lfs merge=lfs -text
+toolchain/macos-x86_64/llvm-ar filter=lfs diff=lfs merge=lfs -text
+toolchain/macos-x86_64/wasm-as filter=lfs diff=lfs merge=lfs -text
+toolchain/macos-x86_64/wasm-dis filter=lfs diff=lfs merge=lfs -text
+toolchain/macos-x86_64/wasm-opt filter=lfs diff=lfs merge=lfs -text
