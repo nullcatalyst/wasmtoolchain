@@ -2,6 +2,7 @@ cc_library(
     name = "dlmalloc",
     srcs = [
         "dlmalloc.c",
+        "sbrk.c",
         "unistd.h",
     ],
     defines = ["PAGESIZE=65535"],

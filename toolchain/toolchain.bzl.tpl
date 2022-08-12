@@ -21,7 +21,8 @@ def _toolchain_impl(ctx):
     ]
 
     cxx_builtin_include_directories = [
-        # "../libc/include",
+        "%package(@bazel_wasm_toolchain//lib/c)%/include",
+        "%package(@bazel_wasm_toolchain//lib/cxx)%/include",
     ]
 
     artifact_name_patterns = [
@@ -69,6 +70,10 @@ def _toolchain_impl(ctx):
                                 "--target=wasm32-unknown-unknown",
                                 "-Wl,--no-entry",
                                 "--no-standard-libraries",
+
+                                "-L%{base_path}",
+                                "-lc",
+                                "-ldlmalloc",
                             ],
                         ),
                     ]),

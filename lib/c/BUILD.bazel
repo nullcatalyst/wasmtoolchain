@@ -1,6 +1,8 @@
 cc_library(
     name = "c",
     srcs = [
+        "src/abort.c",
+        "src/exit.c",
         "src/memcmp.c",
         "src/memcpy.c",
         "src/memmove.c",
