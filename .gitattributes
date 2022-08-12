@@ -4,3 +4,9 @@ toolchain/macos-x86_64/llvm-ar filter=lfs diff=lfs merge=lfs -text
 toolchain/macos-x86_64/wasm-as filter=lfs diff=lfs merge=lfs -text
 toolchain/macos-x86_64/wasm-dis filter=lfs diff=lfs merge=lfs -text
 toolchain/macos-x86_64/wasm-opt filter=lfs diff=lfs merge=lfs -text
+toolchain/windows-x86_64/clang.exe filter=lfs diff=lfs merge=lfs -text
+toolchain/windows-x86_64/llvm-ar.exe filter=lfs diff=lfs merge=lfs -text
+toolchain/windows-x86_64/lld.exe filter=lfs diff=lfs merge=lfs -text
+toolchain/windows-x86_64/wasm-as.exe filter=lfs diff=lfs merge=lfs -text
+toolchain/windows-x86_64/wasm-dis.exe filter=lfs diff=lfs merge=lfs -text
+toolchain/windows-x86_64/wasm-opt.exe filter=lfs diff=lfs merge=lfs -text

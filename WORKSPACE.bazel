@@ -1,0 +1,6 @@
+workspace(name = "bazel_wasm_toolchain")
+
+##### WebAssembly #####
+load("//toolchain:toolchain.bzl", "wasm_toolchain")
+
+wasm_toolchain(name = "wasm_toolchain")

@@ -1,0 +1,6 @@
+Binaries: clang.exe; llvm-ar.exe; lld.exe;
+Symlinks: clang++.exe -> clang.exe; wasm-ld.exe -> lld.exe;
+https://github.com/llvm/llvm-project/releases/download/llvmorg-14.0.6/LLVM-14.0.6-win64.exe
+
+Binaries: wasm-as.exe; wasm-dis.exe; wasm-opt.exe;
+https://github.com/WebAssembly/binaryen/releases/download/version_109/binaryen-version_109-x86_64-windows.tar.gz
