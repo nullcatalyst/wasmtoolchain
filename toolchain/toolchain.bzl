@@ -7,21 +7,21 @@ def _wasm_toolchain_impl(ctx):
         exe_extension = ".exe"
 
         tools = {
-            "@bazel_wasm_toolchain//toolchain:windows-x86_64/clang.exe": "clang.exe",
-            "@bazel_wasm_toolchain//toolchain:windows-x86_64/clang++.exe": "clang++.exe",
-            "@bazel_wasm_toolchain//toolchain:windows-x86_64/llvm-ar.exe": "llvm-ar.exe",
+            "clang.exe": "@bazel_wasm_toolchain//toolchain:windows-x86_64/clang.exe",
+            "clang++.exe": "@bazel_wasm_toolchain//toolchain:windows-x86_64/clang.exe",
+            "llvm-ar.exe": "@bazel_wasm_toolchain//toolchain:windows-x86_64/llvm-ar.exe",
         }
     else:
         base_path = ctx.execute(["pwd"]).stdout
         exe_extension = ""
 
         tools = {
-            "@bazel_wasm_toolchain//toolchain:macos-x86_64/clang": "clang",
-            "@bazel_wasm_toolchain//toolchain:macos-x86_64/clang++": "clang++",
-            "@bazel_wasm_toolchain//toolchain:macos-x86_64/llvm-ar": "llvm-ar",
+            "clang": "@bazel_wasm_toolchain//toolchain:macos-x86_64/clang-14",
+            "clang++": "@bazel_wasm_toolchain//toolchain:macos-x86_64/clang-14",
+            "llvm-ar": "@bazel_wasm_toolchain//toolchain:macos-x86_64/llvm-ar",
         }
 
-    for label, name in tools.items():
+    for name, label in tools.items():
         ctx.symlink(Label(label), name)
 
     ctx.template(
