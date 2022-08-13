@@ -1,6 +1,7 @@
 cc_library(
     name = "cxx",
     srcs = [
+        "src/new.cpp",
         "src/string.cpp",
     ],
     copts = [
