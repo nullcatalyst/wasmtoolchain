@@ -23,5 +23,9 @@ ThrowOnNativeFailure
 Copy-Item -Force -Verbose "bazel-bin\lib\dlmalloc\libdlmalloc.a" -Destination "toolchain\lib\libdlmalloc.a"
 ThrowOnNativeFailure
 
+
+bazel build --config wasm //lib/cxx -c opt
+ThrowOnNativeFailure
+
 tar -czf "toolchain/lib/libcxx_hdrs.tar.gz" -C "lib/cxx/include" "."
 ThrowOnNativeFailure

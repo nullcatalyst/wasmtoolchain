@@ -1,5 +1,8 @@
 cc_library(
     name = "cxx",
+    srcs = [
+        "src/string.cpp",
+    ],
     visibility = ["//:__subpackages__"],
     deps = [
         ":hdrs",

@@ -6,6 +6,7 @@ cc_library(
         "unistd.h",
     ],
     defines = ["PAGESIZE=65535"],
+    local_defines = ["wchar_t=int"],
     textual_hdrs = ["malloc.c"],
     visibility = ["//:__subpackages__"],
     deps = ["//lib/c:hdrs"],

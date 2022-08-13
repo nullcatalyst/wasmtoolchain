@@ -13,8 +13,7 @@
 
 #if defined(__NEED_wchar_t) && !defined(__DEFINED_wchar_t)
 #define __need_wchar_t
-// #include <stddef.h>
-typedef int wchar_t;
+#include <stddef.h>
 #define __DEFINED_wchar_t
 #endif
 
