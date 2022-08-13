@@ -21,8 +21,8 @@ def _toolchain_impl(ctx):
     ]
 
     cxx_builtin_include_directories = [
-        "%package(@bazel_wasm_toolchain//lib/c)%/include",
-        "%package(@bazel_wasm_toolchain//lib/cxx)%/include",
+        "libc/include",
+        "libcxx/include",
     ]
 
     artifact_name_patterns = [
@@ -177,6 +177,7 @@ def _toolchain_impl(ctx):
                             flags = [
                                 # Do not resolve our symlinked resource prefixes to real paths.
                                 "-no-canonical-prefixes",
+                                # "-fno-canonical-system-headers",
                                 # Reproducibility
                                 "-Wno-builtin-macro-redefined",
                                 "-D__DATE__=\"redacted\"",

@@ -1,5 +1,13 @@
 def _wasm_toolchain_impl(ctx):
     ctx.file("WORKSPACE", 'workspace(name = "{}")\n'.format(ctx.name))
+    ctx.extract(
+        archive = Label("@bazel_wasm_toolchain//toolchain:lib/libc_hdrs.tar.gz"),
+        output = "libc/include",
+    )
+    ctx.extract(
+        archive = Label("@bazel_wasm_toolchain//toolchain:lib/libcxx_hdrs.tar.gz"),
+        output = "libcxx/include",
+    )
 
     if "windows" in ctx.os.name:
         base_path = ctx.execute(["cmd.exe", "/c", "echo %cd%"]).stdout
