@@ -65,6 +65,7 @@ def _toolchain_impl(ctx):
         link_flags = [
             "-Lexternal/%{workspace_name}/lib",
             "-lc",
+            "-lcxx",
             "-ldlmalloc",
         ]
     default_linker_flags = feature(

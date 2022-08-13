@@ -33,6 +33,7 @@ def _wasm_toolchain_impl(ctx):
 
     libs = {
         "lib/libc.a": Label("@bazel_wasm_toolchain//toolchain:lib/libc.a"),
+        "lib/libcxx.a": Label("@bazel_wasm_toolchain//toolchain:lib/libcxx.a"),
         "lib/libdlmalloc.a": Label("@bazel_wasm_toolchain//toolchain:lib/libdlmalloc.a"),
     }
 
