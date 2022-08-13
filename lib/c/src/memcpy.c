@@ -146,7 +146,7 @@ void* memcpy(void* __restrict dst, const void* __restrict src, size_t n) {
         *d = *s;
     }
     return dst;
-#endif  // ^^^ __GNUC__
+#endif
 
     for (; n; n--) {
         *d++ = *s++;
