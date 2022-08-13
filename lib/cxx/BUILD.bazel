@@ -3,6 +3,10 @@ cc_library(
     srcs = [
         "src/string.cpp",
     ],
+    copts = [
+        "-fno-rtti",
+        "-fno-exceptions",
+    ],
     visibility = ["//:__subpackages__"],
     deps = [
         ":hdrs",
