@@ -1,21 +1,33 @@
-#pragma once
+#ifndef _MALLOC_H
+#define _MALLOC_H
 
-#define __NEED_size_t
-#include <bits/alltypes.h>
-
+#ifdef __wasilibc_unmodified_upstream /* Use alternate WASI libc headers */
+#else
+#include <__functions_malloc.h>
+#endif
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void* malloc(size_t size);
-void* calloc(size_t size, size_t count);
-void* realloc(void* ptr, size_t size);
-void  free(void* ptr);
+#define __NEED_size_t
 
-int    posix_memalign(void** memptr, size_t alignment, size_t size);
-void*  aligned_alloc(size_t alignment, size_t bytes);
-size_t malloc_usable_size(void* ptr);
+#include <bits/alltypes.h>
+
+#ifdef __wasilibc_unmodified_upstream /* Use alternate WASI libc headers */
+void *malloc (size_t);
+void *calloc (size_t, size_t);
+void *realloc (void *, size_t);
+void free (void *);
+#endif
+#ifdef __wasilibc_unmodified_upstream /* WASI libc doesn't build the legacy functions */
+void *valloc (size_t);
+void *memalign(size_t, size_t);
+#endif
+
+size_t malloc_usable_size(void *);
 
 #ifdef __cplusplus
-}  // extern "C"
+}
+#endif
+
 #endif

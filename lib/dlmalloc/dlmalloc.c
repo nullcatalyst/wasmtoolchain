@@ -1,13 +1,13 @@
 // This file is a wrapper around malloc.c, which is the upstream source file.
 // It sets configuration flags and controls which symbols are exported.
 
-#include <stddef.h>
 #include <malloc.h>
+#include <stddef.h>
 
 // Define configuration macros for dlmalloc.
 
 // Disable some unsupported headers.
-#define LACKS_SYS_TYPES_H 1
+// #define LACKS_SYS_TYPES_H 1
 #define LACKS_ERRNO_H 1
 
 // WebAssembly doesn't have mmap-style memory allocation.
@@ -69,30 +69,16 @@ static size_t dlmalloc_usable_size(void*);
 
 // Export the public names.
 
-void *malloc(size_t size) {
-    return dlmalloc(size);
-}
+void* malloc(size_t size) { return dlmalloc(size); }
 
-void free(void *ptr) {
-    dlfree(ptr);
-}
+void free(void* ptr) { dlfree(ptr); }
 
-void *calloc(size_t nmemb, size_t size) {
-    return dlcalloc(nmemb, size);
-}
+void* calloc(size_t nmemb, size_t size) { return dlcalloc(nmemb, size); }
 
-void *realloc(void *ptr, size_t size) {
-    return dlrealloc(ptr, size);
-}
+void* realloc(void* ptr, size_t size) { return dlrealloc(ptr, size); }
 
-int posix_memalign(void **memptr, size_t alignment, size_t size) {
-    return dlposix_memalign(memptr, alignment, size);
-}
+int posix_memalign(void** memptr, size_t alignment, size_t size) { return dlposix_memalign(memptr, alignment, size); }
 
-void* aligned_alloc(size_t alignment, size_t bytes) {
-    return dlmemalign(alignment, bytes);
-}
+void* aligned_alloc(size_t alignment, size_t bytes) { return dlmemalign(alignment, bytes); }
 
-size_t malloc_usable_size(void *ptr) {
-    return dlmalloc_usable_size(ptr);
-}
+size_t malloc_usable_size(void* ptr) { return dlmalloc_usable_size(ptr); }

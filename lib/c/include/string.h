@@ -1,59 +1,128 @@
-#pragma once
+#ifndef	_STRING_H
+#define	_STRING_H
 
-#define __NEED_NULL
-#define __NEED_size_t
-#define __NEED_wchar_t
-#include <bits/alltypes.h>
-
+#ifdef __wasilibc_unmodified_upstream /* Use alternate WASI libc headers */
+#else
+#include <__header_string.h>
+#endif
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void* memcpy(void* __restrict, const void* __restrict, size_t);
-void* memmove(void*, const void*, size_t);
-void* memset(void*, int, size_t);
-int   memcmp(const void*, const void*, size_t);
+#include <features.h>
 
-#if __has_builtin(__builtin_memcpy)
-#define memcpy __builtin_memcpy
+#ifdef __wasilibc_unmodified_upstream /* Use the compiler's definition of NULL */
+#if __cplusplus >= 201103L
+#define NULL nullptr
+#elif defined(__cplusplus)
+#define NULL 0L
+#else
+#define NULL ((void*)0)
+#endif
+#else
+#define __need_NULL
+#include <stddef.h>
 #endif
 
-#if __has_builtin(__builtin_memmove)
-#define memmove __builtin_memmove
+#define __NEED_size_t
+#if defined(_POSIX_SOURCE) || defined(_POSIX_C_SOURCE) \
+ || defined(_XOPEN_SOURCE) || defined(_GNU_SOURCE) \
+ || defined(_BSD_SOURCE)
+#define __NEED_locale_t
 #endif
 
-#if __has_builtin(__builtin_memset)
-#define memset __builtin_memset
+#include <bits/alltypes.h>
+
+#ifdef __wasilibc_unmodified_upstream /* Use alternate WASI libc headers */
+void *memcpy (void *__restrict, const void *__restrict, size_t);
+void *memmove (void *, const void *, size_t);
+void *memset (void *, int, size_t);
+#endif
+int memcmp (const void *, const void *, size_t);
+#ifdef __wasilibc_unmodified_upstream /* Use alternate WASI libc headers */
+void *memchr (const void *, int, size_t);
 #endif
 
-#if __has_builtin(__builtin_memcmp)
-#define memcmp __builtin_memcmp
+char *strcpy (char *__restrict, const char *__restrict);
+char *strncpy (char *__restrict, const char *__restrict, size_t);
+
+char *strcat (char *__restrict, const char *__restrict);
+char *strncat (char *__restrict, const char *__restrict, size_t);
+
+#ifdef __wasilibc_unmodified_upstream /* Use alternate WASI libc headers */
+int strcmp (const char *, const char *);
+#endif
+int strncmp (const char *, const char *, size_t);
+
+int strcoll (const char *, const char *);
+size_t strxfrm (char *__restrict, const char *__restrict, size_t);
+
+char *strchr (const char *, int);
+char *strrchr (const char *, int);
+
+size_t strcspn (const char *, const char *);
+size_t strspn (const char *, const char *);
+char *strpbrk (const char *, const char *);
+char *strstr (const char *, const char *);
+char *strtok (char *__restrict, const char *__restrict);
+
+#ifdef __wasilibc_unmodified_upstream /* Use alternate WASI libc headers */
+size_t strlen (const char *);
 #endif
 
-int    strcmp(const char* l, const char* r);
-char*  strcpy(char* __restrict d, const char* __restrict s);
-char*  strncpy(char* __restrict, const char* __restrict, size_t);
-size_t strlen(const char* s);
+char *strerror (int);
 
-char* strchr(const char*, int);
-char* strrchr(const char*, int);
-char* strcat(char* __restrict, const char* __restrict);
-char* strncat(char* __restrict, const char* __restrict, size_t);
-
-char* strstr(const char*, const char*);
-
-#if __has_builtin(__builtin_strcmp)
-#define strcmp __builtin_strcmp
+#if defined(_BSD_SOURCE) || defined(_GNU_SOURCE)
+#include <strings.h>
 #endif
 
-#if __has_builtin(__builtin_strcpy)
-#define strcpy __builtin_strcpy
+#if defined(_POSIX_SOURCE) || defined(_POSIX_C_SOURCE) \
+ || defined(_XOPEN_SOURCE) || defined(_GNU_SOURCE) \
+ || defined(_BSD_SOURCE)
+char *strtok_r (char *__restrict, const char *__restrict, char **__restrict);
+int strerror_r (int, char *, size_t);
+char *stpcpy(char *__restrict, const char *__restrict);
+char *stpncpy(char *__restrict, const char *__restrict, size_t);
+size_t strnlen (const char *, size_t);
+#ifdef __wasilibc_unmodified_upstream /* Use alternate WASI libc headers */
+char *strdup (const char *);
+#endif
+char *strndup (const char *, size_t);
+char *strsignal(int);
+char *strerror_l (int, locale_t);
+int strcoll_l (const char *, const char *, locale_t);
+size_t strxfrm_l (char *__restrict, const char *__restrict, size_t, locale_t);
 #endif
 
-#if __has_builtin(__builtin_strlen)
-#define strlen __builtin_strlen
+#if defined(_XOPEN_SOURCE) || defined(_GNU_SOURCE) \
+ || defined(_BSD_SOURCE)
+void *memccpy (void *__restrict, const void *__restrict, int, size_t);
+#endif
+
+#if defined(_GNU_SOURCE) || defined(_BSD_SOURCE)
+char *strsep(char **, const char *);
+size_t strlcat (char *, const char *, size_t);
+size_t strlcpy (char *, const char *, size_t);
+void explicit_bzero (void *, size_t);
+#endif
+
+#ifdef _GNU_SOURCE
+#define	strdupa(x)	strcpy(alloca(strlen(x)+1),x)
+int strverscmp (const char *, const char *);
+char *strchrnul(const char *, int);
+char *strcasestr(const char *, const char *);
+void *memmem(const void *, size_t, const void *, size_t);
+void *memrchr(const void *, int, size_t);
+void *mempcpy(void *, const void *, size_t);
+#ifdef __wasilibc_unmodified_upstream /* avoid unprototyped decls; use <libgen.h> */
+#ifndef __cplusplus
+char *basename();
+#endif
+#endif
 #endif
 
 #ifdef __cplusplus
-}  // extern "C"
+}
+#endif
+
 #endif

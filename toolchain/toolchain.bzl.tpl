@@ -108,6 +108,11 @@ def _toolchain_impl(ctx):
                         flags = [
                             "--target=wasm32-unknown-unknown",
                             "-D__wasm__=1",
+                            "-D__wasm32__=1",
+                            "-D__wasi__=1",
+                            "-D__EMSCRIPTEN__=1",
+                            "-D_WASI_EMULATED_SIGNAL=1",
+                            "-D_REENTRANT=1",
                             "-Wall",
                             "-Werror",
                         ],
@@ -129,7 +134,6 @@ def _toolchain_impl(ctx):
                 flag_groups = [
                     flag_group(
                         flags = [
-                            "-std=c++20",
                             "-nostdinc++",
                         ] + cpp_sys_hdrs,
                     ),
