@@ -33,6 +33,9 @@ typedef unsigned long uint64_t;
 typedef signed long long   int64_t;
 typedef unsigned long long uint64_t;
 #endif
+
+typedef int64_t  intmax_t;
+typedef uint64_t uintmax_t;
 #endif
 
 #if defined(__NEED_ptrdiff_t) && !defined(__DEFINED_ptrdiff_t)
