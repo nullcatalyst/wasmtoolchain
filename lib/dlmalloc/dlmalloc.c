@@ -8,6 +8,7 @@
 
 // Disable some unsupported headers.
 // #define LACKS_SYS_TYPES_H 1
+#define LACKS_SCHED_H 1
 #define LACKS_ERRNO_H 1
 
 // WebAssembly doesn't have mmap-style memory allocation.
