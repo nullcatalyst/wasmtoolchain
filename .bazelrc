@@ -1,4 +1,4 @@
 # WebAssembly
 build:wasm              --crosstool_top=@wasm_toolchain//:toolchain
-build:wasm              --cpu=wasm
+build:wasm              --cpu=wasm32
 # build:wasm              --incompatible_enable_cc_toolchain_resolution

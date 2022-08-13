@@ -3,7 +3,8 @@ load(":toolchain.bzl", "cc_toolchain_config")
 cc_toolchain_suite(
     name = "toolchain",
     toolchains = {
-        "wasm": ":wasm_toolchain",
+        "wasm32": ":wasm_toolchain",
+        "wasm32|clang": ":wasm_toolchain",
     },
 )
 

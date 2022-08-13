@@ -2,9 +2,11 @@ load("@bazel_tools//tools/build_defs/cc:action_names.bzl", "ACTION_NAMES")
 load("@bazel_tools//tools/cpp:cc_toolchain_config_lib.bzl", "artifact_name_pattern", "feature", "flag_group", "flag_set", "tool_path", "with_feature_set")
 
 def _tool_path(path):
-    return "%{base_path}/{}%{exe_extension}".format(path)
+    return "%{base_path}/tools/{}%{exe_extension}".format(path)
 
 def _toolchain_impl(ctx):
+    include_stdlib = %{include_stdlib}
+
     cc_tool_path = _tool_path("clang")
     cpp_tool_path = _tool_path("clang++")
     ld_tool_path = _tool_path("wasm-ld")
@@ -20,10 +22,12 @@ def _toolchain_impl(ctx):
         tool_path(name = "strip", path = "false"),
     ]
 
-    cxx_builtin_include_directories = [
-        "%package(@%{workspace_name}//)%/lib/c/include",
-        "%package(@%{workspace_name}//)%/lib/cxx/include",
-    ]
+    cxx_builtin_include_directories = []
+    if include_stdlib:
+        cxx_builtin_include_directories = [
+            "%workspace%/include/libc",
+            "%workspace%/include/libcxx",
+        ]
 
     artifact_name_patterns = [
         artifact_name_pattern(
@@ -56,6 +60,13 @@ def _toolchain_impl(ctx):
     ]
     all_compile_actions = c_compile_actions + cpp_compile_actions
 
+    link_flags = []
+    if include_stdlib:
+        link_flags = [
+            "-Lexternal/%{workspace_name}/lib",
+            "-lc",
+            "-ldlmalloc",
+        ]
     default_linker_flags = feature(
         name = "default_linker_flags",
         enabled = True,
@@ -68,16 +79,24 @@ def _toolchain_impl(ctx):
                             "--target=wasm32-unknown-unknown",
                             "-Wl,--no-entry",
                             "--no-standard-libraries",
-                            "-L%{base_path}",
-                            "-lc",
-                            "-ldlmalloc",
-                        ],
+                        ] + link_flags,
                     ),
                 ]),
             ),
         ],
     )
 
+    c_sys_hdrs = []
+    cpp_sys_hdrs = []
+    if include_stdlib:
+        c_sys_hdrs = [
+            "-isystem",
+            "external/%{workspace_name}/include/libc",
+        ]
+        cpp_sys_hdrs = [
+            "-isystem",
+            "external/%{workspace_name}/include/libcxx",
+        ]
     default_compile_flags = feature(
         name = "default_compile_flags",
         enabled = True,
@@ -111,7 +130,7 @@ def _toolchain_impl(ctx):
                     flag_group(
                         flags = [
                             "-nostdinc",
-                        ],
+                        ] + c_sys_hdrs,
                     ),
                 ],
             ),
@@ -120,9 +139,9 @@ def _toolchain_impl(ctx):
                 flag_groups = [
                     flag_group(
                         flags = [
-                            "-nostdinc++",
                             "-std=c++20",
-                        ],
+                            "-nostdinc++",
+                        ] + cpp_sys_hdrs,
                     ),
                 ],
             ),
@@ -242,13 +261,12 @@ def _toolchain_impl(ctx):
     return cc_common.create_cc_toolchain_config_info(
         ctx = ctx,
         features = features,
-        # action_configs = action_configs,
         artifact_name_patterns = artifact_name_patterns,
         cxx_builtin_include_directories = cxx_builtin_include_directories,
         toolchain_identifier = "wasm-toolchain",
         host_system_name = "local",
-        target_system_name = "local",
-        target_cpu = "wasm",
+        target_system_name = "wasm32",
+        target_cpu = "wasm32",
         target_libc = "unknown",
         compiler = "clang",
         abi_version = "unknown",
