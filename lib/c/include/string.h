@@ -32,7 +32,15 @@ int   memcmp(const void*, const void*, size_t);
 
 int    strcmp(const char* l, const char* r);
 char*  strcpy(char* __restrict d, const char* __restrict s);
+char*  strncpy(char* __restrict, const char* __restrict, size_t);
 size_t strlen(const char* s);
+
+char* strchr(const char*, int);
+char* strrchr(const char*, int);
+char* strcat(char* __restrict, const char* __restrict);
+char* strncat(char* __restrict, const char* __restrict, size_t);
+
+char* strstr(const char*, const char*);
 
 #if __has_builtin(__builtin_strcmp)
 #define strcmp __builtin_strcmp
