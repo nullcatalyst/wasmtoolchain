@@ -46,6 +46,7 @@ def _wasm_toolchain_impl(ctx):
         "BUILD.bazel",
         ctx.attr._build_tpl,
         {
+            "%{workspace_name}": ctx.name,
             "%{base_path}": base_path,
             "%{exe_extension}": exe_extension,
         },
@@ -54,6 +55,7 @@ def _wasm_toolchain_impl(ctx):
         "toolchain.bzl",
         ctx.attr._toolchain_tpl,
         {
+            "%{workspace_name}": ctx.name,
             "%{base_path}": base_path,
             "%{exe_extension}": exe_extension,
         },

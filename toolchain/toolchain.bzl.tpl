@@ -21,8 +21,8 @@ def _toolchain_impl(ctx):
     ]
 
     cxx_builtin_include_directories = [
-        "libc/include",
-        "libcxx/include",
+        "%package(@%{workspace_name}//)%/lib/c/include",
+        "%package(@%{workspace_name}//)%/lib/cxx/include",
     ]
 
     artifact_name_patterns = [
@@ -43,152 +43,200 @@ def _toolchain_impl(ctx):
         ACTION_NAMES.assemble,
         ACTION_NAMES.preprocess_assemble,
     ]
-    all_compile_actions = [
+    c_compile_actions = [
         ACTION_NAMES.linkstamp_compile,
         ACTION_NAMES.c_compile,
+        ACTION_NAMES.lto_backend,
+    ]
+    cpp_compile_actions = [
         ACTION_NAMES.cpp_compile,
         ACTION_NAMES.cpp_header_parsing,
         ACTION_NAMES.cpp_module_compile,
         ACTION_NAMES.cpp_module_codegen,
-        ACTION_NAMES.lto_backend,
-        ACTION_NAMES.clif_match,
     ]
+    all_compile_actions = c_compile_actions + cpp_compile_actions
+
+    default_linker_flags = feature(
+        name = "default_linker_flags",
+        enabled = True,
+        flag_sets = [
+            flag_set(
+                actions = all_link_actions,
+                flag_groups = ([
+                    flag_group(
+                        flags = [
+                            "--target=wasm32-unknown-unknown",
+                            "-Wl,--no-entry",
+                            "--no-standard-libraries",
+                            "-L%{base_path}",
+                            "-lc",
+                            "-ldlmalloc",
+                        ],
+                    ),
+                ]),
+            ),
+        ],
+    )
+
+    default_compile_flags = feature(
+        name = "default_compile_flags",
+        enabled = True,
+        flag_sets = [
+            flag_set(
+                actions = all_link_actions + all_assemble_actions + all_compile_actions,
+                flag_groups = [
+                    flag_group(
+                        flags = [
+                            "--target=wasm32-unknown-unknown",
+                            "-D__wasm__=1",
+                            "-Wall",
+                            "-Werror",
+                        ],
+                    ),
+                ],
+            ),
+            flag_set(
+                actions = all_assemble_actions,
+                flag_groups = [
+                    flag_group(
+                        flags = [
+                            "-fno-canonical-system-headers",
+                        ],
+                    ),
+                ],
+            ),
+            flag_set(
+                actions = c_compile_actions,
+                flag_groups = [
+                    flag_group(
+                        flags = [
+                            "-nostdinc",
+                        ],
+                    ),
+                ],
+            ),
+            flag_set(
+                actions = cpp_compile_actions,
+                flag_groups = [
+                    flag_group(
+                        flags = [
+                            "-nostdinc++",
+                            "-std=c++20",
+                        ],
+                    ),
+                ],
+            ),
+            flag_set(
+                actions = all_link_actions + all_assemble_actions + all_compile_actions,
+                flag_groups = [
+                    flag_group(flags = [
+                        "-glldb",
+                        "-O0",
+                    ]),
+                ],
+                with_features = [with_feature_set(features = ["dbg"])],
+            ),
+            flag_set(
+                actions = all_link_actions + all_assemble_actions + all_compile_actions,
+                flag_groups = [
+                    flag_group(flags = [
+                        "-glldb",
+                        "-gline-tables-only",
+                        "-O1",
+                    ]),
+                ],
+                with_features = [with_feature_set(features = ["fastbuild"])],
+            ),
+            flag_set(
+                actions = all_link_actions + all_assemble_actions + all_compile_actions,
+                flag_groups = [
+                    flag_group(
+                        flags = [
+                            "-g0",
+                            "-O3",
+                            "-DNDEBUG",
+                        ],
+                    ),
+                ],
+                with_features = [with_feature_set(features = ["opt"])],
+            ),
+        ],
+    )
+
+    user_compile_flags = feature(
+        name = "user_compile_flags",
+        enabled = True,
+        flag_sets = [
+            flag_set(
+                actions = all_assemble_actions + all_compile_actions,
+                flag_groups = [
+                    flag_group(
+                        flags = ["%{user_compile_flags}"],
+                        iterate_over = "user_compile_flags",
+                        expand_if_available = "user_compile_flags",
+                    ),
+                ],
+            ),
+        ],
+    )
+
+    include_paths = feature(
+        name = "include_paths",
+        enabled = True,
+        flag_sets = [
+            flag_set(
+                actions = c_compile_actions + cpp_compile_actions,
+                flag_groups = [
+                    flag_group(
+                        flags = ["-iquote", "%{quote_include_paths}"],
+                        iterate_over = "quote_include_paths",
+                    ),
+                    flag_group(
+                        flags = ["-I%{include_paths}"],
+                        iterate_over = "include_paths",
+                    ),
+                    flag_group(
+                        flags = ["-isystem", "%{system_include_paths}"],
+                        iterate_over = "system_include_paths",
+                    ),
+                ],
+            ),
+        ],
+    )
+
+    unfiltered_compile_flags = feature(
+        name = "unfiltered_compile_flags",
+        enabled = True,
+        flag_sets = [
+            flag_set(
+                actions = all_assemble_actions + all_compile_actions,
+                flag_groups = [
+                    flag_group(
+                        flags = [
+                            # Do not resolve our symlinked resource prefixes to real paths.
+                            "-no-canonical-prefixes",
+                            # "-fno-canonical-system-headers",
+                            # Reproducibility
+                            "-Wno-builtin-macro-redefined",
+                            "-D__DATE__=\"redacted\"",
+                            "-D__TIMESTAMP__=\"redacted\"",
+                            "-D__TIME__=\"redacted\"",
+                        ],
+                    ),
+                ],
+            ),
+        ],
+    )
 
     features = [
         feature(name = "dbg"),
         feature(name = "opt"),
         feature(name = "fastbuild"),
-        feature(
-            name = "default_linker_flags",
-            enabled = True,
-            flag_sets = [
-                flag_set(
-                    actions = all_link_actions,
-                    flag_groups = ([
-                        flag_group(
-                            flags = [
-                                "--target=wasm32-unknown-unknown",
-                                "-Wl,--no-entry",
-                                "--no-standard-libraries",
-
-                                "-L%{base_path}",
-                                "-lc",
-                                "-ldlmalloc",
-                            ],
-                        ),
-                    ]),
-                ),
-            ],
-        ),
-        feature(
-            name = "default_compile_flags",
-            enabled = True,
-            flag_sets = [
-                flag_set(
-                    actions = all_link_actions + all_assemble_actions + all_compile_actions,
-                    flag_groups = [
-                        flag_group(
-                            flags = [
-                                "--target=wasm32-unknown-unknown",
-                                "-D__wasm__=1",
-                                "-Wall",
-                                "-Werror",
-                            ],
-                        ),
-                    ],
-                ),
-                flag_set(
-                    actions = all_link_actions + all_assemble_actions + all_compile_actions,
-                    flag_groups = [
-                        flag_group(flags = [
-                            "-glldb",
-                            "-O0",
-                        ]),
-                    ],
-                    with_features = [with_feature_set(features = ["dbg"])],
-                ),
-                flag_set(
-                    actions = all_link_actions + all_assemble_actions + all_compile_actions,
-                    flag_groups = [
-                        flag_group(flags = [
-                            "-glldb",
-                            "-gline-tables-only",
-                            "-O1",
-                        ]),
-                    ],
-                    with_features = [with_feature_set(features = ["fastbuild"])],
-                ),
-                flag_set(
-                    actions = all_link_actions + all_assemble_actions + all_compile_actions,
-                    flag_groups = [
-                        flag_group(
-                            flags = [
-                                "-g0",
-                                "-O3",
-                                "-DNDEBUG",
-                            ],
-                        ),
-                    ],
-                    with_features = [with_feature_set(features = ["opt"])],
-                ),
-                flag_set(
-                    actions = [
-                        # all_compile_actions - [ACTION_NAMES.c_compile]
-                        ACTION_NAMES.linkstamp_compile,
-                        ACTION_NAMES.cpp_compile,
-                        ACTION_NAMES.cpp_header_parsing,
-                        ACTION_NAMES.cpp_module_compile,
-                        ACTION_NAMES.cpp_module_codegen,
-                        ACTION_NAMES.lto_backend,
-                        ACTION_NAMES.clif_match,
-                    ],
-                    flag_groups = [
-                        flag_group(flags = [
-                            "-std=c++20",
-                        ]),
-                    ],
-                ),
-            ],
-        ),
-        feature(
-            name = "user_compile_flags",
-            enabled = True,
-            flag_sets = [
-                flag_set(
-                    actions = all_assemble_actions + all_compile_actions,
-                    flag_groups = [
-                        flag_group(
-                            flags = ["%{user_compile_flags}"],
-                            iterate_over = "user_compile_flags",
-                            expand_if_available = "user_compile_flags",
-                        ),
-                    ],
-                ),
-            ],
-        ),
-        feature(
-            name = "unfiltered_compile_flags",
-            enabled = True,
-            flag_sets = [
-                flag_set(
-                    actions = all_assemble_actions + all_compile_actions,
-                    flag_groups = [
-                        flag_group(
-                            flags = [
-                                # Do not resolve our symlinked resource prefixes to real paths.
-                                "-no-canonical-prefixes",
-                                # "-fno-canonical-system-headers",
-                                # Reproducibility
-                                "-Wno-builtin-macro-redefined",
-                                "-D__DATE__=\"redacted\"",
-                                "-D__TIMESTAMP__=\"redacted\"",
-                                "-D__TIME__=\"redacted\"",
-                            ],
-                        ),
-                    ],
-                ),
-            ],
-        ),
+        default_linker_flags,
+        default_compile_flags,
+        user_compile_flags,
+        include_paths,
+        unfiltered_compile_flags,
     ]
 
     return cc_common.create_cc_toolchain_config_info(
