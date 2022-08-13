@@ -12,6 +12,9 @@
 
 // Type limits
 
+// clang-format off
+#define CHAR_BIT    8                           // bits in a byte
+
 #define	SCHAR_MAX   127                         // min value for a signed char
 #define	SCHAR_MIN   (-128)                      // max value for a signed char
 
@@ -40,3 +43,4 @@
 #define	ULLONG_MAX  0xFFFFFFFFFFFFFFFFull       // max unsigned long long
 #define	LLONG_MAX   0x7FFFFFFFFFFFFFFFll        // max signed long long
 #define	LLONG_MIN   (-0x7FFFFFFFFFFFFFFFll-1)   // min signed long long
+// clang-format on

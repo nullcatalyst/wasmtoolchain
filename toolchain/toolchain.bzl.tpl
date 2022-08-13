@@ -25,8 +25,8 @@ def _toolchain_impl(ctx):
     cxx_builtin_include_directories = []
     if include_stdlib:
         cxx_builtin_include_directories = [
-            "%workspace%/include/libc",
-            "%workspace%/include/libcxx",
+            "%package(@%{workspace_name}//)%/include/libc",
+            "%package(@%{workspace_name}//)%/include/libcxx",
         ]
 
     artifact_name_patterns = [
@@ -125,16 +125,6 @@ def _toolchain_impl(ctx):
                 ],
             ),
             flag_set(
-                actions = c_compile_actions,
-                flag_groups = [
-                    flag_group(
-                        flags = [
-                            "-nostdinc",
-                        ] + c_sys_hdrs,
-                    ),
-                ],
-            ),
-            flag_set(
                 actions = cpp_compile_actions,
                 flag_groups = [
                     flag_group(
@@ -142,6 +132,16 @@ def _toolchain_impl(ctx):
                             "-std=c++20",
                             "-nostdinc++",
                         ] + cpp_sys_hdrs,
+                    ),
+                ],
+            ),
+            flag_set(
+                actions = c_compile_actions + cpp_compile_actions,
+                flag_groups = [
+                    flag_group(
+                        flags = [
+                            "-nostdinc",
+                        ] + c_sys_hdrs,
                     ),
                 ],
             ),
