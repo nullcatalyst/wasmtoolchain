@@ -21,7 +21,7 @@ def _wasm_toolchain_impl(ctx):
             "tools/wasm-ld.exe": Label("@bazel_wasm_toolchain//toolchain:windows-x86_64/lld.exe"),
         }
     else:
-        base_path = ctx.execute(["pwd"]).stdout
+        base_path = ctx.execute(["pwd"]).stdout.strip()
         exe_extension = ""
 
         tools = {
