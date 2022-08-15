@@ -28,7 +28,7 @@ def _wasm_toolchain_impl(ctx):
             "tools/clang": Label("@bazel_wasm_toolchain//toolchain:macos-x86_64/clang-14"),
             "tools/clang++": Label("@bazel_wasm_toolchain//toolchain:macos-x86_64/clang-14"),
             "tools/llvm-ar": Label("@bazel_wasm_toolchain//toolchain:macos-x86_64/llvm-ar"),
-            "tools/wasm-ld": Label("@bazel_wasm_toolchain//toolchain:macos-x86_64/lld.exe"),
+            "tools/wasm-ld": Label("@bazel_wasm_toolchain//toolchain:macos-x86_64/lld"),
         }
 
     libs = {
