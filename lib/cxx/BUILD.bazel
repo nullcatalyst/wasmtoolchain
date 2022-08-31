@@ -2,6 +2,7 @@ cc_library(
     name = "cxx",
     srcs = [
         "src/cxx_hacks.cpp",
+        "src/hash.cpp",
         "src/new.cpp",
         "src/string.cpp",
     ],

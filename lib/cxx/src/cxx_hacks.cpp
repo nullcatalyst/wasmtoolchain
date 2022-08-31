@@ -1,3 +1,7 @@
+#include <stdlib.h>
+
+extern "C" void __cxa_pure_virtual() { abort(); }
+
 extern "C" int __cxa_atexit(void (*func)(void*), void* arg, void* dso_handle) {
     // This is normally called in order to run the destructors of global objects
     // Since that will never actually happen in (our) wasm, we can safely ignore these calls
