@@ -47,7 +47,7 @@ def _wasm_toolchain_impl(ctx):
             '"darwin|clang": "@local_config_cc//:cc-compiler-darwin_x86_64",',
             '"darwin": "@local_config_cc//:cc-compiler-darwin_x86_64",',
         ])
-    elif "nix" in ctx.os.name:
+    elif "linux" in ctx.os.name:
         base_path = ctx.execute(["pwd"]).stdout.strip()
 
         tools = {
