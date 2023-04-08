@@ -73,11 +73,7 @@ def _wasm_toolchain_impl(ctx):
 
     symlinks = dict(tools, **libs)  # merge dicts
     for name, label in symlinks.items():
-        ctx.symlink(
-            label,
-            target_file = name,
-            is_executable = True,
-        )
+        ctx.symlink(label, name)
 
     ctx.template(
         "BUILD.bazel",
