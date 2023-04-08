@@ -73,7 +73,11 @@ def _wasm_toolchain_impl(ctx):
 
     symlinks = dict(tools, **libs)  # merge dicts
     for name, label in symlinks.items():
-        ctx.symlink(label, name)
+        ctx.symlink(
+            label,
+            target_file = name,
+            is_executable = True,
+        )
 
     ctx.template(
         "BUILD.bazel",
@@ -83,7 +87,7 @@ def _wasm_toolchain_impl(ctx):
             "%{base_path}": base_path,
             "%{exe_extension}": exe_extension,
             "%{include_stdlib}": "{}".format(ctx.attr.include_stdlib),
-            "%{native_compilers}": "\n    ".join(native_compilers),
+            "%{native_compilers}": "\n        ".join(native_compilers),
         },
     )
 
@@ -100,6 +104,7 @@ def _wasm_toolchain_impl(ctx):
 
 wasm_toolchain = repository_rule(
     attrs = {
+        "include_stdlib": attr.bool(default = True),
         "_build_tpl": attr.label(
             default = Label("{ws}//toolchain:BUILD.bazel.tpl".format(ws = _WORKSPACE_NAME)),
             allow_single_file = True,
@@ -108,7 +113,6 @@ wasm_toolchain = repository_rule(
             default = Label("{ws}//toolchain:toolchain.bzl.tpl".format(ws = _WORKSPACE_NAME)),
             allow_single_file = True,
         ),
-        "include_stdlib": attr.bool(default = True),
     },
     implementation = _wasm_toolchain_impl,
 )
