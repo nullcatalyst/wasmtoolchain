@@ -58,9 +58,9 @@ def _wasm_toolchain_impl(ctx):
         }
 
         native_compilers.extend([
-            '"k8|gcc": "@local_config_cc//:cc-compiler-k8"',
-            '"k8|clang": "@local_config_cc//:cc-compiler-k8"',
-            '"k8": "@local_config_cc//:cc-compiler-k8"',
+            '"k8|gcc": "@local_config_cc//:cc-compiler-k8",',
+            '"k8|clang": "@local_config_cc//:cc-compiler-k8",',
+            '"k8": "@local_config_cc//:cc-compiler-k8",',
         ])
     else:
         fail("Unsupported platform: {}".format(ctx.os.name))
