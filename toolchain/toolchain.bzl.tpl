@@ -78,6 +78,7 @@ def _toolchain_impl(ctx):
                         flags = [
                             "--target=wasm32-unknown-unknown",
                             "-Wl,--no-entry",
+                            "-Wl,--export-table",
                             "--no-standard-libraries",
                         ] + link_flags,
                     ),
