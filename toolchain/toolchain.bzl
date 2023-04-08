@@ -49,7 +49,6 @@ def _wasm_toolchain_impl(ctx):
         ])
     elif "nix" in ctx.os.name:
         base_path = ctx.execute(["pwd"]).stdout.strip()
-        exe_extension = ""
 
         tools = {
             "tools/clang": Label("{ws}//toolchain:linux-x86_64/clang-14".format(ws = _WORKSPACE_NAME)),
@@ -63,6 +62,8 @@ def _wasm_toolchain_impl(ctx):
             '"k8|clang": "@local_config_cc//:cc-compiler-k8"',
             '"k8": "@local_config_cc//:cc-compiler-k8"',
         ])
+    else:
+        fail("Unsupported platform: {}".format(ctx.os.name))
 
     libs = {
         "lib/libc.a": Label("{ws}//toolchain:lib/libc.a".format(ws = _WORKSPACE_NAME)),
