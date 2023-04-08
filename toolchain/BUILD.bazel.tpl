@@ -29,11 +29,17 @@ filegroup(name = "empty")
 # The compiler needs to be able to access all of the headers.
 filegroup(
     name = "compiler_files",
-    srcs = glob(["include/**/*"]),
+    srcs = glob([
+        "include/**/*",
+        "tools/**/*",
+    ]),
 )
 
 # The linker needs to be able to access the standard library.
 filegroup(
     name = "linker_files",
-    srcs = glob(["lib/**/*"]),
+    srcs = glob([
+        "lib/**/*",
+        "tools/**/*",
+    ]),
 )

@@ -1,9 +1,9 @@
-workspace(name = "bazel_wasm_toolchain")
+workspace(name = "com_nullcatalyst_wasmtoolchain")
 
 ##### WebAssembly #####
 load("//toolchain:toolchain.bzl", "wasm_toolchain")
 
 wasm_toolchain(
     name = "wasm_toolchain",
-    include_stdlib = False,
+    include_stdlib = True,
 )
