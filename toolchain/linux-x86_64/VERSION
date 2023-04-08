@@ -1,0 +1,13 @@
+Binaries: clang; llvm-ar; lld;
+
+```
+git clone https://github.com/llvm/llvm-project.git
+git checkout llvmorg-14.0.6
+mkdir wasm_build_14_0_6
+cd wasm_build_14_0_6
+cmake -DLLVM_ENABLE_PROJECTS="clang;lld" -DCMAKE_BUILD_TYPE=Release -G Ninja ../llvm -DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=WebAssembly -DLLVM_TARGETS_TO_BUILD=
+ninja
+```
+
+Binaries: wasm-as; wasm-dis; wasm-opt;
+https://github.com/WebAssembly/binaryen/releases/download/version_109/binaryen-version_109-x86_64-linux.tar.gz
