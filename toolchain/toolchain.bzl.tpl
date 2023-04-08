@@ -33,8 +33,7 @@ def _toolchain_impl(ctx):
         artifact_name_pattern(
             category_name = "executable",
             prefix = "",
-            extension = "",
-            # extension = ".wasm",
+            extension = ".wasm",
         ),
     ]
 
