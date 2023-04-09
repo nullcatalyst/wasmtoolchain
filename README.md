@@ -32,13 +32,13 @@ wasm_toolchain(name = "wasm_toolchain")
 
 Then pass the following flags when running `bazel` on the command line:
 
-```
+```sh
 --crosstool_top=@wasm_toolchain//:toolchain --cpu=wasm32
 ```
 
 Or, better yet, add a special configuration to your `.bazelrc` file (it's a file that sits right beside your `WORKSPACE.bazel` file) so that it is easier to remember:
 
-```
+```bzl
 # This tells bazel that whenever a `build` command is run using the `wasm` config
 # ie: `bazel build --config wasm ...`, then also add the following flags
 build:wasm              --crosstool_top=@wasm_toolchain//:toolchain
